@@ -1,5 +1,6 @@
 const express = require('express');
-const path = require('path');
+const api = require('./routes/api-routes')
+const html =  require('./routes/html-routes')
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -11,17 +12,11 @@ app.use(express.urlencoded({ extended: true }));
 // Static directory
 app.use(express.static('public'));
 
-// HTML Routes
-app.get('/notes', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/notes.html'));
-});
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/index.html'));
-});
-
 // API Routes
-require('./routes/api-routes')(app);
+app.use('/api', api);
+
+// HTML Routes
+app.use('/', html);
 
 // Start the server
 app.listen(PORT, () => {
